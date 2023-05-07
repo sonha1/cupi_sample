@@ -30,42 +30,15 @@ import { User } from "./User";
 import { DeviceFindManyArgs } from "../../device/base/DeviceFindManyArgs";
 import { Device } from "../../device/base/Device";
 import { DeviceWhereUniqueInput } from "../../device/base/DeviceWhereUniqueInput";
+import { Public } from "src/decorators/public.decorator";
 
 @swagger.ApiBearerAuth()
-@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard)
 export class UserControllerBase {
   constructor(
     protected readonly service: UserService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @common.Post()
-  @swagger.ApiCreatedResponse({ type: User })
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "create",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
-  async create(@common.Body() data: UserCreateInput): Promise<User> {
-    return await this.service.create({
-      data: data,
-      select: {
-        address: true,
-        code: true,
-        createdAt: true,
-        email: true,
-        firstName: true,
-        id: true,
-        lastName: true,
-        roles: true,
-        updatedAt: true,
-        username: true,
-      },
-    });
-  }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()

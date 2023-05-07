@@ -17,6 +17,7 @@ import { Type } from "class-transformer";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
+import * as error from "../../errors";
 
 @InputType()
 class UserCreateInput {
@@ -93,7 +94,7 @@ class UserCreateInput {
   password!: string;
 
   @ApiProperty({
-    required: true,
+    required: false,
   })
   @IsJSONValue()
   @Field(() => GraphQLJSON)
